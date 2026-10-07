@@ -32,6 +32,15 @@ describe("archive-only bundle behaviour", () => {
     expect(view.identity.generator).toEqual(generator);
   });
 
+  it("previews managed guidance at Hermes' AGENTS.md destination", () => {
+    const view = inspect(fixture("hermes"));
+    expect(view.state).toBe("generated");
+    if (view.state !== "generated") throw new Error(view.reason);
+    expect(view.writes).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: "managed_guidance", path: "AGENTS.md", destinationBase: "seat_cwd" }),
+    ]));
+  });
+
   it("reports literal URL domains without credentials or inferred traffic", () => {
     const view = inspect();
     expect(view.state === "generated" && view.outsideAddresses).toEqual([
