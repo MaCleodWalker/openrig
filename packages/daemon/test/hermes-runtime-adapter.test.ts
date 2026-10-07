@@ -41,7 +41,7 @@ describe("HermesRuntimeAdapter", () => {
     await adapter.launchHarness(binding, { name: "impl", resumeToken: "session's title" });
     expect(tmux.sendShellCommand).toHaveBeenLastCalledWith(
       "impl@rig",
-      "'hermes' '--tui' '--resume' 'session'\\''s title'",
+      "'hermes' '--tui' '--resume' 'session'\"'\"'s title'",
       undefined,
       { stageIfLong: true, execInScript: true },
     );

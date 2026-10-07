@@ -238,7 +238,7 @@ describe("RigTeardownOrchestrator", () => {
   });
 
   it.each([
-    ["claude-code", "CLAUDE.md"], ["claude-code", "CLAUDE.local.md"], ["codex", "AGENTS.md"],
+    ["claude-code", "CLAUDE.md"], ["claude-code", "CLAUDE.local.md"], ["codex", "AGENTS.md"], ["hermes", "AGENTS.md"],
   ])("preserves %s guidance when a sibling sharing %s cannot stop", async (runtime, fileName) => {
     const { rigId, nodeId, sessionId } = seedRigWithNode({ runtime, cwd: tmpDir });
     if (fileName === "CLAUDE.local.md") rigRepo.setRigClaudeManagedBlockFile(rigId, fileName);
@@ -422,6 +422,7 @@ describe("RigTeardownOrchestrator", () => {
     ["claude-code", "CLAUDE.md"],
     ["claude-code", "CLAUDE.local.md"],
     ["codex", "AGENTS.md"],
+    ["hermes", "AGENTS.md"],
   ])("preserves %s guidance shared through a symlinked working directory (%s)", async (runtime, fileName) => {
     const realCwd = path.join(tmpDir, "real-workspace");
     const aliasCwd = path.join(tmpDir, "alias-workspace");
@@ -448,6 +449,7 @@ describe("RigTeardownOrchestrator", () => {
     ["claude-code", "CLAUDE.md"],
     ["claude-code", "CLAUDE.local.md"],
     ["codex", "AGENTS.md"],
+    ["hermes", "AGENTS.md"],
   ])("preserves %s guidance created while teardown probes tmux (%s)", async (runtime, fileName) => {
     const stale = seedRigWithNode({ runtime, cwd: tmpDir });
     rigRepo.archiveRig(stale.rigId);
@@ -554,7 +556,7 @@ describe("RigTeardownOrchestrator", () => {
       "managed role",
       "<!-- END OpenRig MANAGED BLOCK: role -->",
     ].join("\n"));
-    const { rigId } = seedRigWithNode({ runtime: "codex", cwd, sessionStatus: "exited" });
+    const { rigId } = seedRigWithNode({ runtime: "hermes", cwd, sessionStatus: "exited" });
     const td = buildTeardown();
 
     const result = await td.teardown(rigId);

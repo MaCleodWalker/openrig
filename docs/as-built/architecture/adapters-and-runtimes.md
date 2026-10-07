@@ -1,12 +1,12 @@
 ---
 kind: as-built
-title: Adapters and Runtimes — Claude/Codex/Pi/Stub/Terminal, tmux/cmux, Resume Honesty
+title: Adapters and Runtimes — Claude/Codex/Hermes/Pi/Stub/Terminal, tmux/cmux, Resume Honesty
 status: active
 topics: [agent-runtime, runtime-control]
 domains: [engineering-advisor, operating-advisor]
 applies-when: |
   Need the runtime-adapter contract — how OpenRig launches and resumes a
-  Claude Code, Codex, Pi, Oh My Pi, stub or terminal harness inside tmux, what
+  Claude Code, Codex, Hermes, Pi, Oh My Pi, stub or terminal harness inside tmux, what
   the five required adapter methods do, or how the daemon honestly assesses
   whether a harness actually resumed vs fresh-launched (the resume-honesty
   layer).
@@ -19,7 +19,7 @@ last-updated: 2026-10-05
 # Adapters and Runtimes
 
 How OpenRig drives the agent harnesses. Pod-aware launches go through a
-`RuntimeAdapter`: five adapter classes implement one contract of five required
+`RuntimeAdapter`: six adapter classes implement one contract of five required
 methods. Legacy (non-pod-aware) restore resumes through separate resume
 adapters (`ClaudeResumeAdapter`, `CodexResumeAdapter`, `PiResumeAdapter` and
 `OmpResumeAdapter` in `packages/daemon/src/adapters/*-resume.ts`), which are not
@@ -90,14 +90,14 @@ ends `attention_required`.
 
 ## 2. The runtime adapters
 
-**5** classes implement `RuntimeAdapter`
+**6** classes implement `RuntimeAdapter`
 (`git grep -l 'implements RuntimeAdapter' packages/daemon/src | wc -l`):
-`ClaudeCodeAdapter`, `CodexRuntimeAdapter`, `PiRuntimeAdapter`,
+`ClaudeCodeAdapter`, `CodexRuntimeAdapter`, `HermesRuntimeAdapter`, `PiRuntimeAdapter`,
 `StubRuntimeAdapter` and `TerminalAdapter`. All live under
 `packages/daemon/src/adapters/` (Architecture Rule 1: **0** files there import
 Hono, `git grep -l 'from "hono' -- packages/daemon/src/adapters | wc -l`).
 `OmpRuntimeAdapter` (Oh My Pi) extends `PiRuntimeAdapter`, so the daemon wires
-**6** runtime keys — `claude-code`, `codex`, `pi`, `omp`, `stub`, `terminal`
+**7** runtime keys — `claude-code`, `codex`, `hermes`, `pi`, `omp`, `stub`, `terminal`
 (`startup.ts:968`, and the same map at `:1238`;
 `grep 'adapters: {' packages/daemon/src/startup.ts | grep -o -E '"[a-z-]+": ' | wc -l`).
 

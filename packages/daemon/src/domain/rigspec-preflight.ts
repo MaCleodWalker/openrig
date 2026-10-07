@@ -467,16 +467,16 @@ export async function verifyOmpRuntimeAvailable(rigSpec: PodRigSpec, exec: ExecF
   } catch (err) {
     return [`Runtime "omp" not available ('omp --version' failed: ${runtimeProbeFailure(err)}). If OMP is not installed, install Oh My Pi and ensure 'omp' is on PATH.`];
   }
+}
 
-  /** Probe Hermes seats before launch so a missing CLI is reported with the rig preflight. */
-  export async function verifyHermesRuntimeAvailable(rigSpec: PodRigSpec, exec: ExecFn): Promise<string[]> {
-    if (!rigSpec.pods.some((pod) => pod.members.some((member) => member.runtime === "hermes"))) return [];
-    try {
-      await exec(RUNTIME_COMMANDS["hermes"]!);
-      return [];
-    } catch (err) {
-      return [`Runtime "hermes" not available ('hermes --version' failed: ${runtimeProbeFailure(err)}). Install Hermes Agent and ensure 'hermes' is on PATH.`];
-    }
+/** Probe Hermes seats before launch so a missing CLI is reported with the rig preflight. */
+export async function verifyHermesRuntimeAvailable(rigSpec: PodRigSpec, exec: ExecFn): Promise<string[]> {
+  if (!rigSpec.pods.some((pod) => pod.members.some((member) => member.runtime === "hermes"))) return [];
+  try {
+    await exec(RUNTIME_COMMANDS["hermes"]!);
+    return [];
+  } catch (err) {
+    return [`Runtime "hermes" not available ('hermes --version' failed: ${runtimeProbeFailure(err)}). Install Hermes Agent and ensure 'hermes' is on PATH.`];
   }
 }
 
