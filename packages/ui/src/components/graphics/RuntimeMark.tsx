@@ -40,6 +40,7 @@ const toneClass: Record<RuntimeBrandId, string> = {
   codex: "border-outline/50 bg-surface-lowest/75 text-on-surface",
   pi: "border-[#4c5b9e]/45 bg-[#5b6bb5]/[0.10] text-[#33406e]",
   omp: "border-[#773c99]/45 bg-[#8648ad]/[0.12] text-[#572875]",
+  hermes: "border-[#773c99]/45 bg-[#8648ad]/[0.12] text-[#572875]",
   terminal: "border-outline/45 bg-inverse-surface/[0.08] text-on-surface",
   unknown: "border-outline-variant bg-surface-lowest/55 text-on-surface-variant",
 };
@@ -49,6 +50,7 @@ const inlineToneClass: Record<RuntimeBrandId, string> = {
   codex: "text-on-surface",
   pi: "text-[#33406e]",
   omp: "text-[#572875]",
+  hermes: "text-[#572875]",
   terminal: "text-on-surface",
   unknown: "text-on-surface-variant",
 };

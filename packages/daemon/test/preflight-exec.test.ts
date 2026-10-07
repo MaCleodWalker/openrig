@@ -5,7 +5,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { runtimeProbeFailure, runtimeVersionProbeCwd } from "../src/adapters/preflight-exec.js";
-import { verifyPiRuntimeAvailable } from "../src/domain/rigspec-preflight.js";
+import { verifyHermesRuntimeAvailable, verifyPiRuntimeAvailable } from "../src/domain/rigspec-preflight.js";
 import type { RigSpec } from "../src/domain/types.js";
 
 const roots: string[] = [];
@@ -39,6 +39,15 @@ function probe(mode: string, runtime = "pi") {
 }
 
 describe("runtime version preflight cwd", () => {
+  it("probes Hermes only when the rig uses Hermes", async () => {
+    const exec = vi.fn().mockResolvedValue("Hermes Agent 0.1");
+    expect(await verifyHermesRuntimeAvailable({ pods: [{ members: [{ runtime: "hermes" }] }] } as RigSpec, exec)).toEqual([]);
+    expect(exec.mock.calls).toEqual([["hermes --version"]]);
+    exec.mockClear();
+    expect(await verifyHermesRuntimeAvailable({ pods: [{ members: [{ runtime: "codex" }] }] } as RigSpec, exec)).toEqual([]);
+    expect(exec).not.toHaveBeenCalled();
+  });
+
   it.each(["0.73.1", "pi 0.73.1"])("reports an old Pi version before launch (%s)", async output => {
     const warnings: string[] = [];
     const exec = vi.fn().mockResolvedValue(output);

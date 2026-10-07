@@ -14,6 +14,8 @@ describe("graphics runtime package", () => {
     expect(runtimeBrand("claude-code").label).toBe("Claude");
     expect(normalizeRuntimeBrandId("codex")).toBe("codex");
     expect(runtimeBrand("codex").label).toBe("Codex");
+    expect(normalizeRuntimeBrandId("hermes")).toBe("hermes");
+    expect(runtimeBrand("hermes").label).toBe("Hermes Agent");
   });
 
   it("normalizes tool brands for CMUX, tmux, VS Code, and screenshots", () => {

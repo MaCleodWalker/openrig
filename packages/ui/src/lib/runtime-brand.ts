@@ -1,4 +1,4 @@
-export type RuntimeBrandId = "claude-code" | "codex" | "pi" | "omp" | "terminal" | "unknown";
+export type RuntimeBrandId = "claude-code" | "codex" | "pi" | "omp" | "hermes" | "terminal" | "unknown";
 
 export interface RuntimeBrand {
   id: RuntimeBrandId;
@@ -33,6 +33,12 @@ const RUNTIME_BRANDS: Record<RuntimeBrandId, RuntimeBrand> = {
     shortLabel: "OMP",
     tone: "violet",
   },
+  hermes: {
+    id: "hermes",
+    label: "Hermes Agent",
+    shortLabel: "Hermes",
+    tone: "violet",
+  },
   terminal: {
     id: "terminal",
     label: "Terminal",
@@ -54,6 +60,7 @@ export function normalizeRuntimeBrandId(runtime: string | null | undefined): Run
   // Exact/prefixed match only — never a bare `includes("pi")` (api/pilot/…).
   if (normalized === "pi" || normalized.startsWith("pi-")) return "pi";
   if (normalized === "omp" || normalized.startsWith("omp-") || normalized === "oh-my-pi") return "omp";
+  if (normalized === "hermes" || normalized.startsWith("hermes-")) return "hermes";
   if (normalized === "terminal" || normalized === "tmux" || normalized === "shell") return "terminal";
   return "unknown";
 }

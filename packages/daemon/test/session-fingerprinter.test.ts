@@ -94,6 +94,13 @@ describe("SessionFingerprinter", () => {
     expect(result.confidence).toBe("high");
   });
 
+  it("recognizes a Hermes process from its executable name", async () => {
+    const fp = new SessionFingerprinter({ cmuxAdapter: mockCmux(), tmuxAdapter: mockTmux(), fsExists: () => false });
+    expect(await fp.fingerprint(makePane({ activeCommand: "/usr/local/bin/hermes --tui" })))
+      .toMatchObject({ runtimeHint: "hermes", confidence: "high" });
+    expect((await fp.fingerprint(makePane({ activeCommand: "hermes-helper" }))).runtimeHint).toBe("unknown");
+  });
+
   it("recognizes only an explicit managed OMP runner, not a bare node pane", async () => {
     const fp = new SessionFingerprinter({
       cmuxAdapter: mockCmux(),

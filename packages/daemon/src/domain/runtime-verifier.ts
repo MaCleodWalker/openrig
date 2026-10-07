@@ -114,9 +114,16 @@ export class RuntimeVerifier {
     return result;
   }
 
+  /** Verify Hermes Agent: `hermes --version`, falling back to `hermes --help`. */
+  async verifyHermes(): Promise<RuntimeVerification> {
+    const result = await this.verifyVersionOrHelp("hermes", "hermes");
+    this.persist(result);
+    return result;
+  }
+
   /**
    * Verify multiple runtimes. Returns results in input order.
-   * @param runtimes - canonical runtime names: 'tmux', 'cmux', 'claude-code', 'codex', 'pi', 'omp'
+   * @param runtimes - canonical runtime names: 'tmux', 'cmux', 'claude-code', 'codex', 'pi', 'omp', 'hermes'
    */
   async verifyAll(runtimes: string[]): Promise<RuntimeVerification[]> {
     const results: RuntimeVerification[] = [];
@@ -128,6 +135,7 @@ export class RuntimeVerifier {
         case "codex": results.push(await this.verifyCodex()); break;
         case "pi": results.push(await this.verifyPi()); break;
         case "omp": results.push(await this.verifyOmp()); break;
+        case "hermes": results.push(await this.verifyHermes()); break;
         default: {
           const v = this.buildVerification(runtime, "not_found", null, null, `unknown runtime: ${runtime}`);
           this.persist(v);

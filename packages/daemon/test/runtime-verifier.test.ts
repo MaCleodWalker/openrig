@@ -106,6 +106,15 @@ describe("RuntimeVerifier", () => {
     expect(result.runtime).toBe("codex");
   });
 
+  it("hermes --version succeeds -> verified", async () => {
+    const exec = createMockExec({ "hermes --version": "Hermes Agent 0.1.0" });
+    const verifier = new RuntimeVerifier({ exec, db });
+    const result = await verifier.verifyHermes();
+    expect(result.status).toBe("verified");
+    expect(result.version).toBe("0.1.0");
+    expect(result.runtime).toBe("hermes");
+  });
+
   // T7: verifyTmux auto-persists to DB
   it("verification auto-persists to runtime_verifications table", async () => {
     const exec = createMockExec({ "tmux -V": "tmux 3.4" });

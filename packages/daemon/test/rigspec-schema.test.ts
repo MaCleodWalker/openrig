@@ -44,6 +44,12 @@ describe("RigSpec schema (pod-aware)", () => {
     expect(result.errors).toEqual([]);
   });
 
+  it("accepts Hermes as a pod member runtime", () => {
+    const rig = structuredClone(VALID_RIG);
+    (rig.pods[0]!.members[0] as Record<string, unknown>)["runtime"] = "hermes";
+    expect(RigSpecSchema.validate(rig).valid).toBe(true);
+  });
+
   it.each([
     {
       label: "rig root",

@@ -82,6 +82,7 @@ export class SessionFingerprinter {
         const hint = cmuxMatch.runtime.includes("claude") ? "claude-code" as RuntimeHint
           : cmuxMatch.runtime.includes("codex") ? "codex" as RuntimeHint
           : cmuxMatch.runtime.toLowerCase() === "omp" || cmuxMatch.runtime.toLowerCase() === "oh-my-pi" ? "omp" as RuntimeHint
+          : cmuxMatch.runtime.toLowerCase() === "hermes" ? "hermes" as RuntimeHint
           : "unknown" as RuntimeHint;
         return { runtimeHint: hint, confidence: "highest", evidence };
       }
@@ -105,6 +106,12 @@ export class SessionFingerprinter {
           evidence.processSignal = { command: pane.activeCommand, matched: pattern };
           return { runtimeHint: "codex", confidence: "high", evidence };
         }
+      }
+
+      if (/(?:^|[/\s])hermes(?:\s|$)/.test(cmd)) {
+        evidence.layerUsed = 1;
+        evidence.processSignal = { command: pane.activeCommand, matched: "hermes" };
+        return { runtimeHint: "hermes", confidence: "high", evidence };
       }
 
       if (SHELL_NAMES.has(cmd)) {
